@@ -1,0 +1,55 @@
+<div class="container-fluid p-0">
+  <div class="row">
+    <div class="col-12">
+      <div class="login-card login-dark">
+        <div>
+          <div>
+            <a class="logo">
+              <img class="img-fluid for-light" src="assets/images/equifax-logo.png" alt="looginpage" width="350" />
+              <img class="img-fluid for-dark" src="assets/images/equifax-logo.png" alt="looginpage" width="350"/>
+            </a>
+          </div>
+          <div class="login-main">
+            <form class="theme-form" [formGroup]="loginForm" (keydown.enter)="login()">
+              <h4>
+                Iniciar sesión en la cuenta</h4>
+              <p>Ingrese su correo electrónico y contraseña para iniciar sesión</p>
+              <div class="form-group">
+                <label class="col-form-label">Dirección de correo electrónico</label>
+                <input class="form-control" type="email" required="" placeholder="app@yourmail.com"
+                  formControlName="email" />
+                <div *ngIf="loginForm.controls.email.touched && loginForm.controls.email.errors?.required"
+                  class="text text-danger mt-1">Dirección de correo electrónico es requerida</div>
+                <div *ngIf="loginForm.controls.email.touched && loginForm.controls.email.errors?.email"
+                  class="text text-danger mt-1">Dirección de correo electrónico no válida</div>
+              </div>
+              <div class="form-group">
+                <label class="col-form-label">Contraseña</label>
+                <input class="form-control" [type]="show ? 'text' : 'password'" formControlName="password" required=""
+                  placeholder="*********" />
+                <div class="show-hide" (click)="showPassword()" *ngIf="!show"><span class="show"></span></div>
+                <div class="show-hide" (click)="showPassword()" *ngIf="show"><span class="Hide"></span></div>
+                <div *ngIf="loginForm.controls.password.touched && loginForm.controls.password.errors?.required"
+                  class="text text-danger mt-1">Se requiere contraseña</div>
+              </div>
+              <div class="form-group mb-0">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="checkbox p-0">
+                    <input id="checkbox1" type="checkbox"/>
+                    <label class="text-primary" for="checkbox1"><font color="black" size="2">Recordar contraseña</font></label>
+                  </div>
+                  <!-- <a [routerLink]="'/authentication/forgot-password'" class="link"><font size="2">¿Has olvidado tu contraseña?</font></a> -->
+                </div>
+                <div class="text-end mt-3">
+                  <button class="btn btn-primary d-block w-100" (click)="login()" type="button">
+                    <span>Iniciar sesión</span>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

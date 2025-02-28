@@ -1,0 +1,61 @@
+<div class="container-fluid">
+  <!-- TABLA -->
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-header">
+        <h3>Detalle del documento</h3>
+      </div>
+
+      <div class="table-responsive signal-table">
+        <table class="table table-hover">
+          <thead class="text-center">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Estado de Firma</th>
+              <th scope="col">Estado Consentimiento</th>
+              <th scope="col">Estado Codigo Dactilar</th>
+              <th scope="col">Estado Biometria</th>
+              <th scope="col">Fecha de firma</th>
+              <th scope="col">Archivo</th>
+            </tr>
+          </thead>
+          <tbody class="text-center">
+            <tr *ngIf="!(tableItem$ | async)?.length">
+              <td colspan="6">No hay clientes disponibles</td>
+            </tr>
+            <tr *ngFor="let cliente of (tableItem$ | async) || []; let i = index">
+              <th scope="row">{{ i + 1 }}</th>
+              <td class="text-center">
+                <ngb-highlight [result]="cliente.estadoFirma" [term]="service.searchTerm"></ngb-highlight>
+              </td>
+              <td class="text-center">
+                <ngb-highlight [result]="cliente.estadoConsentimiento" [term]="service.searchTerm"></ngb-highlight>
+              </td>
+              <td class="text-center">
+                <ngb-highlight [result]="cliente.estadoCodDdactilar" [term]="service.searchTerm"></ngb-highlight>
+              </td>
+              <td class="text-center">
+                <ngb-highlight [result]="cliente.estadoBiometria" [term]="service.searchTerm"></ngb-highlight>
+              </td>
+              <td class="text-center">
+                <ngb-highlight [result]="cliente.fechaFirma | date: 'yyyy/MMM/dd'"
+                  [term]="service.searchTerm"></ngb-highlight>
+              </td>
+              <td class="text-center">
+                <!-- nombre del archivo
+                <ngb-highlight [result]="cliente.archivos[0]?.nombre_doc_salida"
+                [term]="service.searchTerm"></ngb-highlight> -->
+                <!-- Botón de descarga (Solo se mostrará si hay archivos disponibles) -->
+                <button *ngIf="detalleClientes[0]?.archivos?.length > 0"
+                  (click)="downloadFile(detalleClientes[0].archivos[0])" class="btn btn-primary">
+                  Descargar archivo
+                </button>
+
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
