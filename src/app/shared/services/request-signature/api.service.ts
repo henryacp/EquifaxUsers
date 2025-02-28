@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { environment } from './../../../../environments/environment';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { Subject } from 'rxjs';
 
 @Injectable({
@@ -71,23 +71,20 @@ export class ApiService {
         );
     });
   }
-  envioLinkWhatsapp(data: any): Promise<any> {
+  envioLinkWhatsapp(data: any): Observable<any> {
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json'
     });
 
-    return new Promise((resolve, reject) => {
-      return this.http.post(this.envioCorreo, data, { headers })
-        .toPromise()
-        .then(response => {
-          // Resuelve la Promise con la respuesta
-          // console.log('Respuesta envio de correo:', response);
-          resolve(response);
-        }, error => {
-          // console.error('Error details envio de correo:', error);
-          reject(error); // Rechaza la Promise en caso de error
-        }
-        );
-    });
-  }
+    return this.http.post(this.envioWhatsapp, data, { headers })
+      .pipe(
+        catchError(this.handleError) // Manejo de errores
+      );
+  }
+
+   // Manejo de errores
+   private handleError(error: HttpErrorResponse) {
+    console.error('Error en la solicitud:', error);
+    return throwError('Ocurrió un error al enviar el link por WhatsApp.');
+  }
 }

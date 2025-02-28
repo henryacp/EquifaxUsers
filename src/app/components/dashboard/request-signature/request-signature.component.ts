@@ -286,11 +286,16 @@ export class RequestSignatureComponent implements OnInit {
         numero_destino: formData.telefono,
         link: apiResponse.linkPrimerFirmante,
       };
-      const envioWhatsappResponse = await this.apiService.envioLinkWhatsapp(whatsappData);
-
-      if (!(envioWhatsappResponse.statusCode >= 200 && envioWhatsappResponse.statusCode <= 209))        {
-        throw new Error('No se pudo enviar el whatsapp.');
-      }
+      await this.apiService.envioLinkWhatsapp(whatsappData).subscribe({
+        next: (response) => {
+          console.log('Respuesta del servidor:', response);
+          
+        },
+        error: (error) => {
+          console.error('Error al enviar el link:', error);
+          
+        }
+      });
 
       // Si todo es exitoso, guardar el cliente en la base de datos
       const clienteResponse = await this.dashService.addCliente(

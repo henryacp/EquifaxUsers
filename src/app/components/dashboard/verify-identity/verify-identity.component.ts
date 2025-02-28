@@ -131,9 +131,9 @@ export class VerifyIdentityComponent implements OnInit {
       };
       const envioWhatsappResponse = await this.apiService.envioLinkWhatsapp(whatsappData);
 
-      if (!(envioWhatsappResponse.statusCode >= 200 && envioWhatsappResponse.statusCode <= 209))        {
-        throw new Error('No se pudo enviar el whatsapp.');
-      }
+      // if (!(envioWhatsappResponse.statusCode >= 200 && envioWhatsappResponse.statusCode <= 209))        {
+      //   throw new Error('No se pudo enviar el whatsapp.');
+      // }
   
       // Guardar cliente al final del proceso
       const clienteResp = await this.dashService.addCliente(nombres, apellidos, formData.cedula, this.randomTextNumber, formData.email, 2);
