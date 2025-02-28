@@ -1,8 +1,8 @@
-import { Component, OnInit, Inject, ChangeDetectorRef } from "@angular/core";
-import { DOCUMENT } from "@angular/common";
+import { Component, OnInit, Inject, ChangeDetectorRef, AfterViewInit } from "@angular/core";
 import { NavService } from "../../services/nav.service";
 import { LayoutService } from "../../services/layout.service";
 import SwiperCore, { Navigation, Pagination, Autoplay } from "swiper";
+import { DOCUMENT } from '@angular/common';
 
 SwiperCore.use([Navigation, Pagination, Autoplay]);
 @Component({
@@ -10,66 +10,73 @@ SwiperCore.use([Navigation, Pagination, Autoplay]);
   templateUrl: "./header.component.html",
   styleUrls: ["./header.component.scss"],
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, AfterViewInit {
   public elem: any;
 
-  constructor(public layout: LayoutService, public navServices: NavService, @Inject(DOCUMENT) private document: any,private cdr: ChangeDetectorRef) {}
+  constructor(
+    public layout: LayoutService,
+    public navServices: NavService,
+    @Inject(DOCUMENT) private document: Document,
+    private cdr: ChangeDetectorRef
+  ) {}
 
-  ngOnInit() {
-    this.elem = document.documentElement;
+  ngOnInit(): void {
+    this.elem = this.document.documentElement;
   }
+
   ngAfterViewInit(): void {
     this.cdr.detectChanges(); // Forza la actualización del layout
   }
-  sidebarToggle() {
+
+  sidebarToggle(): void {
     this.navServices.collapseSidebar = !this.navServices.collapseSidebar;
     this.navServices.megaMenu = false;
     this.navServices.levelMenu = false;
   }
 
-  layoutToggle() {
-    if ((this.layout.config.settings.layout_version = "dark-only")) {
-      document.body.classList.toggle("dark-only");
+  layoutToggle(): void {
+    if (this.layout.config.settings.layout_version === "dark-only") {
+      this.document.body.classList.toggle("dark-only");
     }
-    document.body.remove;
   }
 
-  searchToggle() {
+  searchToggle(): void {
     this.navServices.search = true;
   }
 
-  languageToggle() {
+  languageToggle(): void {
     this.navServices.language = !this.navServices.language;
   }
 
-  toggleFullScreen() {
+  async toggleFullScreen(): Promise<void> {
     this.navServices.fullScreen = !this.navServices.fullScreen;
-    if (this.navServices.fullScreen) {
-      if (this.elem.requestFullscreen) {
-        this.elem.requestFullscreen();
-      } else if (this.elem.mozRequestFullScreen) {
-        /* Firefox */
-        this.elem.mozRequestFullScreen();
-      } else if (this.elem.webkitRequestFullscreen) {
-        /* Chrome, Safari and Opera */
-        this.elem.webkitRequestFullscreen();
-      } else if (this.elem.msRequestFullscreen) {
-        /* IE/Edge */
-        this.elem.msRequestFullscreen();
+  
+    try {
+      if (this.navServices.fullScreen) {
+        // Entrar en pantalla completa
+        if (this.elem.requestFullscreen) {
+          await this.elem.requestFullscreen();
+        } else if (this.elem.mozRequestFullScreen) {
+          await this.elem.mozRequestFullScreen(); // Firefox
+        } else if (this.elem.webkitRequestFullscreen) {
+          await this.elem.webkitRequestFullscreen(); // Chrome, Safari y Opera
+        } else if (this.elem.msRequestFullscreen) {
+          await this.elem.msRequestFullscreen(); // IE/Edge
+        }
+      } else {
+        // Salir de pantalla completa
+        if (this.document.exitFullscreen) {
+          await this.document.exitFullscreen();
+        } else if ((this.document as any).mozCancelFullScreen) {
+          await (this.document as any).mozCancelFullScreen(); // Firefox
+        } else if ((this.document as any).webkitExitFullscreen) {
+          await (this.document as any).webkitExitFullscreen(); // Chrome, Safari y Opera
+        } else if ((this.document as any).msExitFullscreen) {
+          await (this.document as any).msExitFullscreen(); // IE/Edge
+        }
       }
-    } else {
-      if (!this.document.exitFullscreen) {
-        this.document.exitFullscreen();
-      } else if (this.document.mozCancelFullScreen) {
-        /* Firefox */
-        this.document.mozCancelFullScreen();
-      } else if (this.document.webkitExitFullscreen) {
-        /* Chrome, Safari and Opera */
-        this.document.webkitExitFullscreen();
-      } else if (this.document.msExitFullscreen) {
-        /* IE/Edge */
-        this.document.msExitFullscreen();
-      }
+    } catch (error) {
+      console.error("Error al cambiar el modo de pantalla completa:", error);
     }
   }
 }
