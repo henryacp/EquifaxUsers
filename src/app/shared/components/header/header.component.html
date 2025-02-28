@@ -1,28 +1,26 @@
-<!-- Page Header Start-->
 <div class="page-header" [class.close_icon]="navServices.collapseSidebar">
-  <div class="header-wrapper row m-0" style="min-height: 100px;">
+  <div class="header-wrapper row m-0 align-items-center" style="min-height: 90px;">
+    
+    <!-- Logo and Toggle Sidebar -->
     <div class="header-logo-wrapper col-auto p-0">
-      <!-- <div class="logo-wrapper">
-        <a>
-          <img class="img-fluid for-light" src="assets/images/logo/logo.svg" alt="" />
-          <img class="img-fluid for-dark" src="assets/images/logo/logo_dark.svg" alt="" />
-        </a>
-      </div> -->
-      
-      <div class="toggle-sidebar" (click)="sidebarToggle()">
+      <div class="toggle-sidebar" (click)="sidebarToggle()" aria-label="Toggle sidebar">
         <app-feather-icons [icon]="'align-center'" class="status_toggle middle"></app-feather-icons>
       </div>
     </div>
+
+    <!-- Swiper Section -->
     <div class="left-header col-xxl-5 col-xl-6 col-lg-5 col-md-4 col-sm-3 p-0">
       <app-swiper></app-swiper>
     </div>
-    <div class="nav-right col-xxl-7 col-xl-6 col-md-7 col-8 pull-right right-header p-0 ms-auto">
-      <ul class="nav-menus">
+
+    <!-- Navigation Menu -->
+    <div class="nav-right col-xxl-7 col-xl-6 col-md-7 col-8 p-0 ms-auto">
+      <ul class="nav-menus d-flex justify-content-end align-items-center m-0 p-0">
         <li class="profile-nav onhover-dropdown p-0">
           <app-my-account></app-my-account>
         </li>
       </ul>
     </div>
+
   </div>
 </div>
-<!-- Page Header Ends -->

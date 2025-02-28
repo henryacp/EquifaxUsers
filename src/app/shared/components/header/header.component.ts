@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from "@angular/core";
+import { Component, OnInit, Inject, ChangeDetectorRef } from "@angular/core";
 import { DOCUMENT } from "@angular/common";
 import { NavService } from "../../services/nav.service";
 import { LayoutService } from "../../services/layout.service";
@@ -13,12 +13,14 @@ SwiperCore.use([Navigation, Pagination, Autoplay]);
 export class HeaderComponent implements OnInit {
   public elem: any;
 
-  constructor(public layout: LayoutService, public navServices: NavService, @Inject(DOCUMENT) private document: any) {}
+  constructor(public layout: LayoutService, public navServices: NavService, @Inject(DOCUMENT) private document: any,private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.elem = document.documentElement;
   }
-
+  ngAfterViewInit(): void {
+    this.cdr.detectChanges(); // Forza la actualización del layout
+  }
   sidebarToggle() {
     this.navServices.collapseSidebar = !this.navServices.collapseSidebar;
     this.navServices.megaMenu = false;
